@@ -15,14 +15,14 @@ public class JsonUtils {
         try {
             JSONObject masterJSONObject = new JSONObject(json);
             JSONObject name = masterJSONObject.getJSONObject("name");
-            String placeOfOrigin = masterJSONObject.getString("placeOfOrigin");
-            String description = masterJSONObject.getString("description");
-            String imageURL = masterJSONObject.getString("image");
+            String placeOfOrigin = masterJSONObject.optString("placeOfOrigin");
+            String description = masterJSONObject.optString("description");
+            String imageURL = masterJSONObject.optString("image");
             JSONArray ingredients = masterJSONObject.getJSONArray("ingredients");
             List<String> ingredients_list = JSONArrayToList(ingredients);
             JSONArray akas = name.getJSONArray("alsoKnownAs");
             List<String> alias = JSONArrayToList(akas);
-            return new Sandwich(name.getString("mainName"),alias,
+            return new Sandwich(name.optString("mainName"),alias,
                     placeOfOrigin,description,
                     imageURL,ingredients_list);
         } catch (JSONException e) {
@@ -33,11 +33,8 @@ public class JsonUtils {
     private static List<String> JSONArrayToList(JSONArray jsonArray){
         List<String>resultList = new ArrayList<>();
         for(int i=0;i<jsonArray.length();i++){
-            try {
-                resultList.add(jsonArray.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            resultList.add(jsonArray.optString(i));
+
         }
         return resultList;
     }
